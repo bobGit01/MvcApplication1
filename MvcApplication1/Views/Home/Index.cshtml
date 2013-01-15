@@ -1,0 +1,133 @@
+﻿@{
+	<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+	<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+	<script>		!window.jQuery && document.write(unescape('%3Cscript src="jquery/jquery-1.7.2.min.js"%3E%3C/script%3E'))</script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+	<script>		!window.jQuery.ui && document.write(unescape('%3Cscript src="jquery/jquery-ui-1.8.21.custom.min.js"%3E%3C/script%3E'))</script>
+}
+<div id="example" class="k-content">
+	<form method="post" name="form1" id="form-password" action="">
+	<fieldset>
+		<label>
+			Password:</label>
+		<input type="password" name="password" id="password" value="" size="32" />
+		<label>
+			Re-Enter Password:</label>
+		<input type="password" name="password-check" id="password-check" value="" size="32" />
+		<input type="submit" value="Submit" id="submit">
+	</fieldset>
+	</form>
+	<ul id="tabul">
+		<li id="litab" class="ntabs add"><a href="" id="addtab">+</a></li>
+	</ul>
+	<div id="tabcontent">
+	</div>
+	<div class="ui-widget" style="margin-top: 10px">
+		<label for="tags">
+			Tags:
+		</label>
+		<input id="tags" />
+	</div>
+</div>
+<script>
+
+	$(document).ready(function () {
+
+		jQuery(function () {
+			$("#submit").click(function () {
+				$(".error").hide();
+				var hasError = false;
+				var passwordVal = $("#password").val();
+				var checkVal = $("#password-check").val();
+				if (passwordVal == '') {
+					$("#password").after('<span class="error">Please enter a password.</span>');
+					hasError = true;
+				} else if (checkVal == '') {
+					$("#password-check").after('<span class="error">Please re-enter your password.</span>');
+					hasError = true;
+				} else if (passwordVal != checkVal) {
+					$("#password-check").after('<span class="error">Passwords do not match.</span>');
+					hasError = true;
+				}
+				if (hasError == true) { return false; }
+			});
+		});
+		
+		$(function () {
+			var availableTags = [
+			  "ActionScript",
+			  "AppleScript",
+			  "Asp",
+			  "BASIC",
+			  "C",
+			  "C++",
+			  "Clojure",
+			  "COBOL",
+			  "ColdFusion",
+			  "Erlang",
+			  "Fortran",
+			  "Groovy",
+			  "Haskell",
+			  "Java",
+			  "JavaScript",
+			  "Lisp",
+			  "Perl",
+			  "PHP",
+			  "Python",
+			  "Ruby",
+			  "Scala",
+			  "Scheme"
+			];
+		$("#tags").autocomplete({
+				source: availableTags
+			});
+		});
+
+		$(function () {
+			var total_tabs = 0;
+
+			// initialize first tab
+			total_tabs++;
+			addtab(total_tabs);
+
+			$("#addtab, #litab").click(function () {
+				total_tabs++;
+				$("#tabcontent p").hide();
+				addtab(total_tabs);
+				return false;
+			});
+
+			function addtab(count) {
+				var closetab = '<a href="" id="close' + count + '" class="close">&times;</a>';
+				$("#tabul").append('<li id="t' + count + '" class="ntabs">Tab ' + count + '&nbsp;&nbsp;' + closetab + '</li>');
+				$("#tabcontent").append('<p id="c' + count + '">Tab Content ' + count + '</p>');
+
+				$("#tabul li").removeClass("ctab");
+				$("#t" + count).addClass("ctab");
+
+				$("#t" + count).bind("click", function () {
+					$("#tabul li").removeClass("ctab");
+					$("#t" + count).addClass("ctab");
+					$("#tabcontent p").hide();
+					$("#c" + count).fadeIn('slow');
+				});
+
+				$("#close" + count).bind("click", function () {
+					// activate the previous tab
+					$("#tabul li").removeClass("ctab");
+					$("#tabcontent p").hide();
+					$(this).parent().prev().addClass("ctab");
+					$("#c" + count).prev().fadeIn('slow');
+
+					$(this).parent().remove();
+					$("#c" + count).remove();
+					return false;
+				});
+			}
+		});
+	});
+</script>
+</div> 
